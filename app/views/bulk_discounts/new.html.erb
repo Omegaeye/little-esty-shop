@@ -1,0 +1,7 @@
+<%= form_with model: @bulk_discount, local: true do |f| %>
+  <%= f.label :percent %>
+  <%= f.number_field :percent , min: 0, step: 0.01, max: 1 %>
+  <%= f.label :quantity_threshold %>
+  <%= f.number_field :quantity_threshold %>
+  <%= f.submit %>
+<% end %>
