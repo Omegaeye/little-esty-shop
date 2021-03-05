@@ -30,3 +30,9 @@
     </div>
   </div>
 </section>
+
+
+<% @holidayservices.each do |serve| %>
+  <p><%= serve.name %>
+  <%= serve.date %></p>
+<% end %>
