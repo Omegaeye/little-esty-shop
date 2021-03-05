@@ -1,0 +1,26 @@
+require 'rails_helper'
+
+RSpec.describe 'As a merchant, when I visit a Merchant Item Show Page' do
+  before :each do
+    @merchant = Merchant.first
+    @discount1 = @merchant.bulk_discounts.create!(percent: 0.23, quantity_threshold: 10)
+  end
+
+  describe 'I can click a button to update that discount' do
+    it 'I am taken to an edit form with the current information pre-populated' do
+      visit merchant_bulk_discount_path(@merchant, @discount1)
+
+      expect(page).to have_button("Update Discount")
+      click_button("Update Discount")
+      expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @discount1))
+
+      expect(page).to have_field("percent")
+      expect(page).to have_field("quantity_threshold")
+
+      fill_in :percent, with: 0.3
+      fill_in :quantity_threshold, with: 15
+      click_button("Update Discount")
+      expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @discount1))
+    end
+  end
+end
