@@ -16,12 +16,12 @@ class BulkDiscountsController < ApplicationController
 
   def create
    @merchant = Merchant.find(params[:merchant_id])
-   bulk = Bulkdiscount.create(bulkdiscount_params)
+   bulk = @merchant.bulk_discounts.create(bulkdiscount_params)
     if bulk.save
-      redirect_to merchant_dashboard_index_path
+      redirect_to merchant_bulk_discounts_path(@merchant)
     else
       flash[:notice] = bulk.errors.full_messages
-      render [:new]
+      render :new
     end
   end
 
@@ -29,6 +29,6 @@ class BulkDiscountsController < ApplicationController
 
   private
   def bulkdiscount_params
-    params.permit(:percent, :quantity_threshold, status: 0)
+    params.permit(:percent, :quantity_threshold, :status)
   end
 end
