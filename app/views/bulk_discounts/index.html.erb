@@ -10,6 +10,8 @@
           <tr>
             <th scope="col"><span class="text white_glow"><h2>Bulk Discounts Percentage:</h2></span></th>
             <th scope="col"><span class="text white_glow"><h2>Quantity Threshold:</h2></span></th>
+            <th scope="col"><span class="text white_glow"><h2>Status:</h2></span></th>
+
           </tr>
         </thead>
         <tbody>
@@ -19,6 +21,7 @@
               <td><%= discount.percent %> <%= button_to "Discount Page",  merchant_bulk_discount_path(@merchant, discount), method: :get %> </td>
               <td><%= discount.quantity_threshold %></td>
               <td> <%= discount.status %> </td>
+              <td> <%= discount.percent %> <%= button_to "Delete Discount",  merchant_bulk_discount_path(@merchant, discount), method: :delete %> </td>
             </section>
             </tr>
           <% end %>
