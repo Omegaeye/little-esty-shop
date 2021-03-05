@@ -1,0 +1,29 @@
+<center><%= render "shared/flash" %></center>
+
+<%= button_to "New Discount", new_merchant_bulk_discount_path(@merchant), method: :get, local: true, class: "btn btn-outline-light" %>
+
+<section class="all-items">
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped table-borderless">
+        <thead >
+          <tr>
+            <th scope="col"><span class="text white_glow"><h2>Bulk Discounts Percentage:</h2></span></th>
+            <th scope="col"><span class="text white_glow"><h2>Quantity Threshold:</h2></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bulkdiscounts.each do |discount|  %>
+            <tr>
+              <section id="discount-<%= discount.id %>">
+              <td><%= discount.percent %> <%= button_to "Discount Page",  merchant_bulk_discount_path(@merchant, discount), method: :get %> </td>
+              <td><%= discount.quantity_threshold %></td>
+              <td> <%= discount.status %> </td>
+            </section>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

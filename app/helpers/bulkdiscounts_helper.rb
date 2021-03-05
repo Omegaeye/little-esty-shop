@@ -1,0 +1,2 @@
+module BulkdiscountsHelper
+end

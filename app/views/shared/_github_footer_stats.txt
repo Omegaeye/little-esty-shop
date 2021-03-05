@@ -18,3 +18,10 @@
   </table>
   Closed Pull Requests: <%= @repo.repo_pull_requests %>
 </footer>
+
+
+
+<% @holidayservices.each do |serve| %>
+  <p><%= serve.name %>
+  <%= serve.date %></p>
+<% end %>
