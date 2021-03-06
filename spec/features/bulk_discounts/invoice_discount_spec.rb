@@ -8,12 +8,13 @@ RSpec.describe 'Merchant Invoices Show Page' do
     @customer = @invoice.customer
     @customer.update(address: '123 Main St', city: 'Denver', state: 'CO', zipcode: '80202')
     @customer.save
+    visit "merchant/#{@merchant.id}/invoices/#{@invoice.id}"
   end
 
   describe "When I visit Merchant Invoices show Page " do
     it "I see the invoice total revenue and revenue after discount" do
       expect(page).to have_content("Discount")
-      expect(page).to have_content("Revenue After Discount")
+      expect(page).to have_content("Total Revenue after discount:")
     end
 
   end

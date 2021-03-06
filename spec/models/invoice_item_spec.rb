@@ -8,6 +8,7 @@ RSpec.describe InvoiceItem, type: :model do
     it {should have_many(:transactions).through(:invoice)}
     it {should have_one(:merchant).through(:item)}
     it {should have_one(:customer).through(:invoice)}
+    it {should have_many(:bulk_discounts).through(:item)}
   end
 
   describe 'validations' do
