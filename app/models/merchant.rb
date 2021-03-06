@@ -36,4 +36,5 @@ class Merchant < ApplicationRecord
      .order("transaction_count desc, customers.last_name")
      .limit(5)
   end
+
 end

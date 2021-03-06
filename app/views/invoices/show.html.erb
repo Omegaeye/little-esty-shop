@@ -11,6 +11,8 @@
   </tr>
 </table>
 
+<%  %>
+
 <section class="invoice-items">
   <h3 class="white_glow"><center>Items on this Invoice:</center></h3>
   <table class="table table-striped table-borderless ">
@@ -19,6 +21,8 @@
         <th class="white_glow">Item Name:</th>
         <th class="white_glow">Quantity:</th>
         <th class="white_glow">Unit Price:</th>
+        <th class="white_glow">Discount Amount:</th>
+        <th class="white_glow">Link to Discount:</th>
         <th class="white_glow">Status:</th>
       </tr>
     </thead>
@@ -28,7 +32,13 @@
       <tr style="text-align:center">
         <td><%= invoice_item.item.name %></td>
         <td><%= invoice_item.quantity %></td>
-        <td><%= number_to_currency(invoice_item.unit_price, precision: 2) %></td>
+          <td><%= number_to_currency(invoice_item.unit_price, precision: 2) %></td>
+          <td><%= number_to_currency(@invoice.discount_amount(invoice_item.id), precision: 2) %></td>
+            <% if @invoice.discount_amount(invoice_item.id) > 0 %>
+              <td><%= link_to "Discount ID##{@invoice.discount_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discount_id(invoice_item.id)), style: "color:white" %></td>
+            <% else %>
+            <td>No Discount</td>
+            <% end %>
         <td>
           <%= form_with url: "/invoice_items/#{invoice_item.id}", method: :patch, model: invoice_item,local: true, locals: {merchant_id: @merchant.id} do |f| %>
             <%= f.hidden_field :invoice_id, value: @invoice.id %>
