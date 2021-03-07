@@ -22,9 +22,9 @@ RSpec.describe 'As a merchant, when I visit a Merchant bulk discount Show Page' 
       fill_in :percent, with: 0.3
       fill_in :quantity_threshold, with: 15
       click_button("Update Discount")
-      visit visit merchant_bulk_discount_path(@merchant, @discount2)
+      expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @discount1))
+      visit merchant_bulk_discount_path(@merchant, @discount2)
       expect(page).to have_content("10.0")
-      # expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @discount1))
     end
   end
 end
