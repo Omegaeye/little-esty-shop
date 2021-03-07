@@ -14,28 +14,50 @@ class Invoice < ApplicationRecord
     invoice_items.sum(&:revenue)
   end
 
-  def discount(invoice_item_id)
+  # def discount(invoice_item_id)
+  #   invoice_items
+  #   .joins(:bulk_discounts)
+  #   .where('invoice_items.quantity >= bulk_discounts.quantity_threshold')
+  #   .select('invoice_items.*, (invoice_items.quantity * invoice_items.unit_price * bulk_discounts.percent) as discount_revenue, bulk_discounts.id as discount_id')
+  #   .where(id: invoice_item_id)
+  #   .order('bulk_discounts.percent DESC')
+  # end
+  #
+  # def discount_amount(invoice_item_id)
+  #   return 0 if discount(invoice_item_id).empty?
+  #   discount(invoice_item_id).first.discount_revenue
+  # end
+
+  # def discounted_revenue
+  #   discounts = invoice_items.map do |item|
+  #     discount_amount(item.id)
+  #   end.sum
+  #   return total_revenue - discounts
+  # end
+
+  # def discount_id(invoice_item_id)
+  #   discount(invoice_item_id).first.discount_id
+  # end
+
+  def discount_rev
     invoice_items
     .joins(:bulk_discounts)
     .where('invoice_items.quantity >= bulk_discounts.quantity_threshold')
     .select('invoice_items.*, (invoice_items.quantity * invoice_items.unit_price * bulk_discounts.percent) as discount_revenue, bulk_discounts.id as discount_id')
-    .where(id: invoice_item_id)
     .order('bulk_discounts.percent DESC')
   end
 
-  def discount_amount(invoice_item_id)
-    return 0 if discount(invoice_item_id).empty?
-    discount(invoice_item_id).first.discount_revenue
+  def discounted_revenue
+    discount = discount_rev.uniq.sum(&:discount_revenue)
+    total_revenue - discount
   end
 
-  def discounted_revenue
-    discounts = invoice_items.map do |item|
-      discount_amount(item.id)
-    end.sum
-    return total_revenue - discounts
+  def discounted_invoice_item(invoice_item_id)
+    return 0 if discount_rev.where(id: invoice_item_id).empty?
+    discount_rev.where(id: invoice_item_id).first.discount_revenue
   end
 
   def discount_id(invoice_item_id)
-    discount(invoice_item_id).first.discount_id
+    discount_rev.where(id: invoice_item_id).first.discount_id
   end
 end

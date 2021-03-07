@@ -39,7 +39,7 @@
             <td><%= invoice_item.item.name %></td>
             <td><%= invoice_item.quantity %></td>
             <td><%= number_to_currency(invoice_item.unit_price, precision: 2) %></td>
-            <td><%= number_to_currency(@invoice.discount_amount(invoice_item.id), precision: 2) %></td>
+            <td><%= number_to_currency(@invoice.discounted_invoice_item(invoice_item.id), precision: 2) %></td>
             <td><%= invoice_item.status.titleize %></td>
           </tr>
         </tbody>

@@ -20,8 +20,10 @@
             </tr>
         </tbody>
       </table>
+      <% if @bulkdiscount.invoice_items_pending? %>
         <%= button_to "Delete Discount",  merchant_bulk_discount_path(@merchant, @bulkdiscount), method: :delete %>
         <%= button_to "Update Discount",  edit_merchant_bulk_discount_path(@merchant, @bulkdiscount), method: :get %>
+        <% end %>
     </div>
   </div>
 </section>

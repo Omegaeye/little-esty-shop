@@ -26,29 +26,28 @@
         <th class="white_glow">Status:</th>
       </tr>
     </thead>
-
-  <% @invoice.invoice_items.each do |invoice_item| %>
-    <tbody class="invoice-item-<%= invoice_item.id %>">
-      <tr style="text-align:center">
-        <td><%= invoice_item.item.name %></td>
-        <td><%= invoice_item.quantity %></td>
+    <tbody>
+      <% @invoice.invoice_items.each do |invoice_item| %>
+        <tr style="text-align:center" class="invoice-item-<%= invoice_item.id %>">
+          <td><%= invoice_item.item.name %></td>
+          <td><%= invoice_item.quantity %></td>
           <td><%= number_to_currency(invoice_item.unit_price, precision: 2) %></td>
-          <td><%= number_to_currency(@invoice.discount_amount(invoice_item.id), precision: 2) %></td>
-            <% if @invoice.discount_amount(invoice_item.id) > 0 %>
-              <td><%= link_to "Discount ID##{@invoice.discount_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discount_id(invoice_item.id)), style: "color:white" %></td>
-            <% else %>
+          <td><%= number_to_currency(@invoice.discounted_invoice_item(invoice_item.id), precision: 2) %></td>
+          <% if @invoice.discounted_invoice_item(invoice_item.id) > 0 %>
+            <td><%= link_to "Discount ID##{@invoice.discount_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discount_id(invoice_item.id)), style: "color:white" %></td>
+          <% else %>
             <td>No Discount</td>
-            <% end %>
-        <td>
-          <%= form_with url: "/invoice_items/#{invoice_item.id}", method: :patch, model: invoice_item,local: true, locals: {merchant_id: @merchant.id} do |f| %>
+          <% end %>
+          <td>
+            <%= form_with url: "/invoice_items/#{invoice_item.id}", method: :patch, model: invoice_item,local: true, locals: {merchant_id: @merchant.id} do |f| %>
             <%= f.hidden_field :invoice_id, value: @invoice.id %>
             <%= f.hidden_field :merchant_id, value: @merchant.id %>
             <%= f.select(:status, ["pending", "packaged", "shipped"], value: :status) %>
             <%= f.submit "Update Item Status" %>
-          <% end %>
-        </td>
-      </tr>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
-  <% end %>
   </table>
 </section>

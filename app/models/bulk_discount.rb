@@ -11,4 +11,8 @@ class BulkDiscount < ApplicationRecord
     self.status = 0
   end
 
+  def invoice_items_pending?
+    invoice_items.where(status: :pending).empty?
+  end
+
 end
