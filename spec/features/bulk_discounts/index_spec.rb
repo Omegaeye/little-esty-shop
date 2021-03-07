@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'As a merchant, when I visit my bulk discount index page' do
   before :each do
-    @merchant = Merchant.first
+    @merchant = Merchant.create(name: "Joe")
     @discount1 = @merchant.bulk_discounts.create!(percent: 0.23, quantity_threshold: 10)
 
-    visit "merchant/1/bulk_discounts"
+    visit "merchant/#{@merchant.id}/bulk_discounts"
   end
 
   it "I see all of my bulk discounts and quantity thresholds with links" do
@@ -33,6 +33,7 @@ RSpec.describe 'As a merchant, when I visit my bulk discount index page' do
   end
 
   it "I can delete bulk discount" do
+
     within "#discount-#{@discount1.id}" do
       expect(page).to have_button("Delete Discount")
       click_button("Delete Discount")

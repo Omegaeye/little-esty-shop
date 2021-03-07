@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'As a merchant, when I visit a Merchant bulk discount Show Page' do
   before :each do
-    @merchant = Merchant.first
+    @merchant = Merchant.create(name: "Joe")
     @discount1 = @merchant.bulk_discounts.create!(percent: 0.23, quantity_threshold: 10)
+    @discount2 = @merchant.bulk_discounts.create!(percent: 0.1, quantity_threshold: 5)
+
   end
 
   describe 'I can click a button to update that discount' do
@@ -20,7 +22,9 @@ RSpec.describe 'As a merchant, when I visit a Merchant bulk discount Show Page' 
       fill_in :percent, with: 0.3
       fill_in :quantity_threshold, with: 15
       click_button("Update Discount")
-      expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @discount1))
+      visit visit merchant_bulk_discount_path(@merchant, @discount2)
+      expect(page).to have_content("10.0")
+      # expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @discount1))
     end
   end
 end

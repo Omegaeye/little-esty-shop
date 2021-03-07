@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'As a merchant, when I visit my bulk discount show page' do
   before :each do
-    @merchant = Merchant.first
+    @merchant = Merchant.create(name: "Joe")
     @discount1 = @merchant.bulk_discounts.create!(percent: 0.23, quantity_threshold: 10)
 
-    visit "merchant/1/bulk_discounts/#{@discount1.id}"
+    visit "merchant/#{@merchant.id}/bulk_discounts/#{@discount1.id}"
   end
 
   it "I see Bulk Discount stats" do
