@@ -43,7 +43,7 @@ class Invoice < ApplicationRecord
     invoice_items
     .joins(:bulk_discounts)
     .where('invoice_items.quantity >= bulk_discounts.quantity_threshold')
-    .select('invoice_items.*, (invoice_items.quantity * invoice_items.unit_price * bulk_discounts.percent) as discount_revenue, bulk_discounts.id as discount_id')
+    .select('invoice_items.*, bulk_discounts.*, (invoice_items.quantity * invoice_items.unit_price * bulk_discounts.percent) as discount_revenue, bulk_discounts.id as discount_id')
     .order('bulk_discounts.percent DESC')
   end
 
