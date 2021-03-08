@@ -34,7 +34,7 @@
           <td><%= number_to_currency(invoice_item.unit_price, precision: 2) %></td>
           <td><%= number_to_currency(@invoice.discounted_invoice_item(invoice_item.id), precision: 2) %></td>
           <% if @invoice.discounted_invoice_item(invoice_item.id) > 0 %>
-            <td><%= link_to "Discount ID##{@invoice.discount_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discount_id(invoice_item.id)), style: "color:white" %></td>
+            <td><%= link_to "Discount ID##{@invoice.discounted_item_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discounted_item_id(invoice_item.id)), style: "color:white" %></td>
           <% else %>
             <td>No Discount</td>
           <% end %>
