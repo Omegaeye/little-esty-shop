@@ -1,6 +1,24 @@
 require 'rails_helper'
 require 'date'
 RSpec.describe Invoice, type: :model do
+  before :each do
+    @customer = Customer.create(first_name: "Bob", last_name: "Hash")
+    @merchant = Merchant.create(name: "Joe")
+    @shroe = Merchant.find(1)
+    @discount1 = @merchant.bulk_discounts.create!(percent: 0.20, quantity_threshold: 10)
+    @discount2 = @merchant.bulk_discounts.create!(percent: 0.1, quantity_threshold: 5)
+    @discount3 = @shroe.bulk_discounts.create!(percent: 0.1, quantity_threshold: 5)
+    @discount4 = @shroe.bulk_discounts.create!(percent: 0.2, quantity_threshold: 10)
+    @item = @merchant.items.create(name: "JoJo", description: "YoYo", unit_price: 1)
+    @item2 = @merchant.items.create(name: "LaLa", description: "String", unit_price: 1)
+    @item3 = @merchant.items.create(name: "Hat", description: "big", unit_price: 1)
+    @invoice1 = @customer.invoices.create(status: 0)
+    @invoice2 = @customer.invoices.create(status: 0)
+    @invoice_item1 = InvoiceItem.create(invoice_id: @invoice1.id, item_id: @item.id, quantity: 5, unit_price: 1, status: "pending")
+    @invoice_item2 = InvoiceItem.create(invoice_id: @invoice1.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
+    @invoice_item3 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 5, unit_price: 1, status: "shipped")
+    @invoice_item4 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
+  end
 
   describe 'relationships' do
     it {should belong_to :customer}
@@ -43,4 +61,23 @@ RSpec.describe Invoice, type: :model do
       end
     end
   end
+
+  it "test discount rev" do
+      invoice = Invoice.find(29)
+    expect(invoice.discount_rev.first.discount_revenue.to_f).to eq(134152.0)
+    expect(invoice.discount_rev.first.percent.to_f).to eq(0.2)
+    expect(invoice.discount_rev.uniq.size).to eq(2)
+  end
+
+  it "test discounted_revenue" do
+      invoice = Invoice.find(29)
+    expect(invoice.discounted_revenue.class).to eq(BigDecimal)
+    expect(invoice.total_revenue - invoice.discounted_revenue).to eq(invoice.discount_rev.uniq.sum(&:discount_revenue))
+  end
+
+  it "test discounted_item_id" do
+      invoice = Invoice.find(29)
+    expect(@invoice1.discounted_item_id(@invoice_item1.id)).to eq(@discount2.id)
+  end
+
 end

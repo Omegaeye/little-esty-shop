@@ -57,7 +57,7 @@ class Invoice < ApplicationRecord
     discount_rev.where(id: invoice_item_id).first.discount_revenue
   end
 
-  def discount_id(invoice_item_id)
+  def discounted_item_id(invoice_item_id)
     discount_rev.where(id: invoice_item_id).first.discount_id
   end
 end
