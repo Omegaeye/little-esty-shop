@@ -80,4 +80,9 @@ RSpec.describe Invoice, type: :model do
     expect(@invoice1.discounted_item_id(@invoice_item1.id)).to eq(@discount2.id)
   end
 
+  it "test discounted_invoice_item" do
+      invoice = Invoice.find(29)
+    expect(@invoice1.discounted_invoice_item(@invoice_item1.id)).to eq(@invoice_item1.quantity * @invoice_item1.unit_price * @discount2.percent)
+  end
+
 end

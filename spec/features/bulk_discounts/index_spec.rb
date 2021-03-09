@@ -15,7 +15,9 @@ RSpec.describe 'As a merchant, when I visit my bulk discount index page' do
     @invoice_item2 = InvoiceItem.create(invoice_id: @invoice1.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
     @invoice_item3 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 5, unit_price: 1, status: "shipped")
     @invoice_item4 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
-
+    @holidayservice1 = HolidayService.holiday_instances.first
+    @holidayservice2 = HolidayService.holiday_instances.second
+    @holidayservice3 = HolidayService.holiday_instances.third
     visit "merchant/#{@merchant.id}/bulk_discounts"
   end
 
@@ -32,10 +34,19 @@ RSpec.describe 'As a merchant, when I visit my bulk discount index page' do
     end
   end
 
-  # it "I see Upcoming Holidays" do
-  #   expect(page).to have_content("Memorial Day")
-  #   expect(page).to have_content("2021-05-31")
-  # end
+  it "I see Upcoming Holidays" do
+    within "#holiday-#{@holidayservice1.date}" do
+      expect(page).to have_content(@holidayservice1.date)
+    end
+
+    within "#holiday-#{@holidayservice2.date}" do
+      expect(page).to have_content(@holidayservice2.date)
+    end
+
+    within "#holiday-#{@holidayservice3.date}" do
+      expect(page).to have_content(@holidayservice3.date)
+    end
+  end
 
   it "I can create new bulk discount" do
     expect(page).to have_button("New Discount")
@@ -43,8 +54,15 @@ RSpec.describe 'As a merchant, when I visit my bulk discount index page' do
     expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant))
   end
 
-  it "I can delete bulk discount" do
+  it "I can create new bulk discount" do
+    expect(page).to have_button("New Discount")
+    click_button("New Discount")
+    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant))
+    click_button("Add Discount")
+    expect(current_path).to eq(merchant_bulk_discounts_path(@merchant))
+  end
 
+  it "I can delete bulk discount" do
     within "#discount-#{@discount1.id}" do
       expect(page).to have_button("Delete Discount")
       click_button("Delete Discount")
