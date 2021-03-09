@@ -4,6 +4,8 @@ RSpec.describe 'Merchant Dashboard' do
   before :each do
     @merchant = Merchant.first
     @customers = @merchant.top_5_customers_by_transactions
+    @merchant1 = Merchant.create(name: "Joe")
+    @discount1 = @merchant.bulk_discounts.create!(percent: 0.20, quantity_threshold: 10)
   end
   describe "As a merchant," do
     describe "When I visit my merchant dashboard (/merchant/merchant_id/dashboard)" do
@@ -71,6 +73,13 @@ RSpec.describe 'Merchant Dashboard' do
             click_link "882"
             expect(current_path).to eq("/merchant/#{@merchant.id}/invoices/882")
           end
+        end
+
+        it "has a link to bulk discount" do
+          visit merchant_dashboard_index_path(@merchant1.id)
+          expect(page).to have_button("My Bulk Discount")
+          click_button("My Bulk Discount")
+          expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1.id))
         end
       end
     end
