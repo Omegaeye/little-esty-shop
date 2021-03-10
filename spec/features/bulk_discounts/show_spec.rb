@@ -34,6 +34,13 @@ RSpec.describe 'As a merchant, when I visit my bulk discount show page' do
     expect(page).to have_button("Update Discount")
     click_button("Update Discount")
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @discount1))
+
+    fill_in :percent, with: 0.25
+    fill_in :quantity_threshold, with: 15
+    click_button("Update Discount")
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant.id, @discount1.id))
+    expect(page).to have_content("25.0%")
+    expect(page).to have_content(15)
   end
 
   it "I cannot delete or update on pending discount" do
