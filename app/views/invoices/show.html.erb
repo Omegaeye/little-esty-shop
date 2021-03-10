@@ -35,7 +35,7 @@
           <td><%= number_to_currency(@invoice.discounted_invoice_item(invoice_item.id), precision: 2) %></td>
             <%= render partial: @invoice.render_link(invoice_item.id), locals: {invoice_item: invoice_item} %>
           <td>
-            <%= form_with url: "/invoice_items/#{invoice_item.id}", method: :patch, model: invoice_item,local: true, locals: {merchant_id: @merchant.id} do |f| %>
+            <%= form_with url: [invoice_item], method: :patch, model: invoice_item,local: true, locals: {merchant_id: @merchant.id} do |f| %>
             <%= f.hidden_field :invoice_id, value: @invoice.id %>
             <%= f.hidden_field :merchant_id, value: @merchant.id %>
             <%= f.select(:status, ["pending", "packaged", "shipped"], value: :status) %>
