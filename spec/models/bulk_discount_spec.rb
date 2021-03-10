@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe BulkDiscount, type: :model do
-  describe 'relationships' do
-    it {should belong_to(:merchant)}
-    it {should have_many(:items).through(:merchant)}
-    it {should have_many(:invoice_items).through(:items)}
-  end
   before :each do
     @customer = Customer.create(first_name: "Bob", last_name: "Hash")
     @merchant = Merchant.create(name: "Joe")
@@ -21,6 +16,13 @@ RSpec.describe BulkDiscount, type: :model do
     @invoice_item3 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 5, unit_price: 1, status: "shipped")
     @invoice_item4 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
 
+  end
+  describe 'relationships' do
+    it {should belong_to(:merchant)}
+    it {should have_many(:items).through(:merchant)}
+    it {should have_many(:invoice_items).through(:items)}
+    it {should validate_presence_of(:percent)}
+    it {should validate_presence_of(:quantity_threshold)}
   end
 
   it "able to get invoice items not pending" do
