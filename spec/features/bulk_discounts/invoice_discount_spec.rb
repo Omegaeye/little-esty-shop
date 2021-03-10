@@ -23,8 +23,6 @@ RSpec.describe 'Merchant Invoices Show Page' do
     it "I see the invoice total revenue and revenue after discount" do
       expect(page).to have_content("Discount")
       expect(page).to have_content("Total Revenue after discount:")
-      expect(page).to have_content(@invoice1.discounted_revenue)
-
     end
 
     it "I see invoice id as link" do
@@ -35,12 +33,6 @@ RSpec.describe 'Merchant Invoices Show Page' do
       within "#discount-#{@discount1.id}" do
         expect(page).to have_link("Discount Id: ##{@discount1.id}")
       end
-    end
-
-    it "I see Discount amount" do
-      expect(page).to have_content("Discount Amount:")
-      expect(page).to have_content(@invoice1.discount_rev.uniq.first.discount_revenue)
-      expect(page).to have_content(@invoice1.discount_rev.uniq.last.discount_revenue)
     end
 
   end
