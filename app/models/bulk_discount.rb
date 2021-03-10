@@ -12,7 +12,8 @@ class BulkDiscount < ApplicationRecord
   end
 
   def invoice_items_pending?
-    invoice_items.where(status: :pending).where('quantity >= ?', self.quantity_threshold).empty?
+    return "delete" if invoice_items.where(status: :pending).where('quantity >= ?', self.quantity_threshold).empty?
+    "empty"
   end
 
 end

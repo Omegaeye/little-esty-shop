@@ -1,0 +1,3 @@
+<section id="discount-<%=@invoice.discounted_item_id(invoice_item.id)%>">
+  <td><%= link_to "Discount Id: ##{@invoice.discounted_item_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discounted_item_id(invoice_item.id)), style: "color:white" %></td>
+</section>

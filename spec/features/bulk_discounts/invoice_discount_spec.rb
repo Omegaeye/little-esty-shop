@@ -4,7 +4,7 @@ RSpec.describe 'Merchant Invoices Show Page' do
   before :each do
     @customer = Customer.create(first_name: "Bob", last_name: "Hash")
     @merchant = Merchant.create(name: "Joe")
-    @discount1 = @merchant.bulk_discounts.create!(percent: 0.20, quantity_threshold: 10)
+    @discount1 = @merchant.bulk_discounts.create!(percent: 0.2, quantity_threshold: 10)
     @discount2 = @merchant.bulk_discounts.create!(percent: 0.1, quantity_threshold: 5)
     @item = @merchant.items.create(name: "JoJo", description: "YoYo", unit_price: 1)
     @item2 = @merchant.items.create(name: "LaLa", description: "String", unit_price: 1)
@@ -23,6 +23,7 @@ RSpec.describe 'Merchant Invoices Show Page' do
     it "I see the invoice total revenue and revenue after discount" do
       expect(page).to have_content("Discount")
       expect(page).to have_content("Total Revenue after discount:")
+      expect(page).to have_content(@invoice1.discounted_revenue)
     end
 
     it "I see invoice id as link" do
@@ -35,5 +36,9 @@ RSpec.describe 'Merchant Invoices Show Page' do
       end
     end
 
+    it "I see Discount Amount: and the value under" do
+      expect(page).to have_content("Discount Amount:")
+      expect(page).to have_content(@invoice1.discount_rev.first.discount_revenue)
+    end
   end
 end

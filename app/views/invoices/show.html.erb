@@ -33,11 +33,7 @@
           <td><%= invoice_item.quantity %></td>
           <td><%= number_to_currency(invoice_item.unit_price, precision: 2) %></td>
           <td><%= number_to_currency(@invoice.discounted_invoice_item(invoice_item.id), precision: 2) %></td>
-          <% if @invoice.discounted_invoice_item(invoice_item.id) > 0 %>
-            <td><%= link_to "Discount ID##{@invoice.discounted_item_id(invoice_item.id)}", merchant_bulk_discount_path(@merchant, @invoice.discounted_item_id(invoice_item.id)), style: "color:white" %></td>
-          <% else %>
-            <td>No Discount</td>
-          <% end %>
+            <%= render partial: @invoice.render_link(invoice_item.id), locals: {invoice_item: invoice_item} %>
           <td>
             <%= form_with url: "/invoice_items/#{invoice_item.id}", method: :patch, model: invoice_item,local: true, locals: {merchant_id: @merchant.id} do |f| %>
             <%= f.hidden_field :invoice_id, value: @invoice.id %>

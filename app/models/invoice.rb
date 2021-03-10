@@ -60,4 +60,9 @@ class Invoice < ApplicationRecord
   def discounted_item_id(invoice_item_id)
     discount_rev.where(id: invoice_item_id).first.discount_id
   end
+
+  def render_link(invoice_item_id)
+    return "zero" if discount_rev.where(id: invoice_item_id).empty?
+    "id"
+  end
 end

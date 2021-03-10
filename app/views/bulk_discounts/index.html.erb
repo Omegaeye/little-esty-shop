@@ -20,9 +20,7 @@
                 <td><%= discount.percent * 100 %>% <%= button_to "Discount Page",  merchant_bulk_discount_path(@merchant, discount), method: :get %> </td>
                 <td><%= discount.quantity_threshold %></td>
                 <td> <%= discount.status %> </td>
-                <% if discount.invoice_items_pending? %>
-                <td> <%= discount.percent * 100 %>% <%= button_to "Delete Discount",  merchant_bulk_discount_path(@merchant, discount), method: :delete %> </td>
-                <% end %>
+              <%= render partial: discount.invoice_items_pending?, locals: {discount: discount} %>
             </section>
             </tr>
           <% end %>
