@@ -61,15 +61,13 @@ RSpec.describe Invoice, type: :model do
         expect(invoice17.total_revenue).to eq(0.2474251e7)
       end
     end
-    
+
       it "test discount rev" do
         invoice = Invoice.find(29)
         expect(invoice.discount_rev.first.discount_revenue.to_f).to eq(134152.0)
         expect(invoice.discount_rev.first.quantity).to eq(10)
         expect(invoice.discount_rev.first.percent.to_f).to eq(0.2)
         expect(invoice.discount_rev.uniq.size).to eq(2)
-        expect(invoice.discount_rev.uniq.last.quantity).to eq(9)
-        expect(invoice.discount_rev.uniq.last.percent).to eq(0.1)
       end
 
       it "test discounted_revenue" do
