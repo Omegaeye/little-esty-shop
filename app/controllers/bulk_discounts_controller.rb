@@ -22,7 +22,7 @@ class BulkDiscountsController < ApplicationController
   def create
    bulkdiscount = @merchant.bulk_discounts.create(bulkdiscount_params)
     if bulkdiscount.save
-      redirect_to merchant_bulk_discounts_path(@merchant)
+      redirect_to [@merchant, :bulk_discounts]
     else
       flash[:notice] = bulkdiscount.errors.full_messages
       render :new
@@ -33,7 +33,7 @@ class BulkDiscountsController < ApplicationController
     discount = BulkDiscount.find(params[:id])
     discount.update(bulkdiscount_params)
     if discount.save
-      redirect_to merchant_bulk_discount_path(@merchant, discount)
+      redirect_to [@merchant, discount]
     else
       flash[:notice] = discount.errors.full_messages
       render :edit
@@ -43,7 +43,7 @@ class BulkDiscountsController < ApplicationController
 
   def destroy
     BulkDiscount.destroy(params[:id])
-    redirect_to "/merchant/#{@merchant.id}/bulk_discounts"
+    redirect_to [@merchant, :bulk_discounts]
   end
 
 
