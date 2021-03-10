@@ -24,8 +24,8 @@ RSpec.describe BulkDiscount, type: :model do
   end
 
   it "able to get invoice items not pending" do
-    expect(@discount2.invoice_items_pending?).to eq(false)
-    expect(@discount1.invoice_items_pending?).to eq(true)
+    expect(@discount2.invoice_items_pending?).to eq("empty")
+    expect(@discount1.invoice_items_pending?).to eq("delete")
   end
 
 

@@ -19,7 +19,8 @@ RSpec.describe 'As a merchant, when I visit my bulk discount show page' do
   end
 
   it "I see Bulk Discount stats" do
-    visit "merchant/#{@merchant.id}/bulk_discounts/#{@discount1.id}"
+    # visit "merchant/#{@merchant.id}/bulk_discounts/#{@discount1.id}"
+    visit merchant_bulk_discount_path(@merchant.id, @discount1.id)
     expect(page).to have_content("Bulk Discount Percentage:")
     expect(page).to have_content("Quantity Threshold:")
     expect(page).to have_content("Status:")
@@ -29,14 +30,14 @@ RSpec.describe 'As a merchant, when I visit my bulk discount show page' do
   end
 
   it "I can update discount" do
-    visit "merchant/#{@merchant.id}/bulk_discounts/#{@discount1.id}"
+    visit merchant_bulk_discount_path(@merchant.id, @discount1.id)
     expect(page).to have_button("Update Discount")
     click_button("Update Discount")
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @discount1))
   end
 
   it "I cannot delete or update on pending discount" do
-    visit "merchant/#{@merchant.id}/bulk_discounts/#{@discount2.id}"
+    visit merchant_bulk_discount_path(@merchant.id, @discount2.id)
     expect(page).to_not have_content("Delete Discount")
   end
 

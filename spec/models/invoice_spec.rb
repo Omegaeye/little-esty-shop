@@ -18,6 +18,7 @@ RSpec.describe Invoice, type: :model do
     @invoice_item2 = InvoiceItem.create(invoice_id: @invoice1.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
     @invoice_item3 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 5, unit_price: 1, status: "shipped")
     @invoice_item4 = InvoiceItem.create(invoice_id: @invoice2.id, item_id: @item.id, quantity: 10, unit_price: 1, status: "shipped")
+    @invoice_item5 = InvoiceItem.create(invoice_id: @invoice1.id, item_id: @item.id, quantity: 2, unit_price: 1, status: "shipped")
   end
 
   describe 'relationships' do
@@ -60,29 +61,42 @@ RSpec.describe Invoice, type: :model do
         expect(invoice17.total_revenue).to eq(0.2474251e7)
       end
     end
+    
+      it "test discount rev" do
+        invoice = Invoice.find(29)
+        expect(invoice.discount_rev.first.discount_revenue.to_f).to eq(134152.0)
+        expect(invoice.discount_rev.first.quantity).to eq(10)
+        expect(invoice.discount_rev.first.percent.to_f).to eq(0.2)
+        expect(invoice.discount_rev.uniq.size).to eq(2)
+        expect(invoice.discount_rev.uniq.last.quantity).to eq(9)
+        expect(invoice.discount_rev.uniq.last.percent).to eq(0.1)
+      end
+
+      it "test discounted_revenue" do
+        invoice = Invoice.find(29)
+        expect(invoice.discounted_revenue.class).to eq(BigDecimal)
+        expect(invoice.total_revenue - invoice.discounted_revenue).to eq(invoice.discount_rev.uniq.sum(&:discount_revenue))
+      end
+
+      it "test discounted_item_id" do
+        expect(@invoice1.discounted_item_id(@invoice_item1.id)).to eq(@discount2.id)
+        expect(@invoice1.discounted_item_id(@invoice_item2.id)).to eq(@discount1.id)
+      end
+      it "test discounted_invoice_item" do
+        invoice = Invoice.find(29)
+        expect(@invoice1.discounted_invoice_item(@invoice_item1.id)).to eq(@invoice_item1.quantity * @invoice_item1.unit_price * @discount2.percent)
+      end
+
+      it "test render_id" do
+        expect(@invoice1.render_id(@invoice_item1.id)).to eq("id")
+        expect(@invoice1.render_id(@invoice_item5.id)).to eq("zero")
+      end
+
   end
 
-  it "test discount rev" do
-      invoice = Invoice.find(29)
-    expect(invoice.discount_rev.first.discount_revenue.to_f).to eq(134152.0)
-    expect(invoice.discount_rev.first.percent.to_f).to eq(0.2)
-    expect(invoice.discount_rev.uniq.size).to eq(2)
-  end
 
-  it "test discounted_revenue" do
-      invoice = Invoice.find(29)
-    expect(invoice.discounted_revenue.class).to eq(BigDecimal)
-    expect(invoice.total_revenue - invoice.discounted_revenue).to eq(invoice.discount_rev.uniq.sum(&:discount_revenue))
-  end
 
-  it "test discounted_item_id" do
-      invoice = Invoice.find(29)
-    expect(@invoice1.discounted_item_id(@invoice_item1.id)).to eq(@discount2.id)
-  end
 
-  it "test discounted_invoice_item" do
-      invoice = Invoice.find(29)
-    expect(@invoice1.discounted_invoice_item(@invoice_item1.id)).to eq(@invoice_item1.quantity * @invoice_item1.unit_price * @discount2.percent)
-  end
+
 
 end
